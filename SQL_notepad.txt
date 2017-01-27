@@ -1,0 +1,43 @@
+http://localhost:8080/recipes/index.php?controller=recipes&action=show&
+id=%3Cbr%20/%3E%3Cb%3ENotice%3C/b%3E:%20%20Undefined%20property:%20Recipe::$id%20in%20%3Cb%3E
+C:\xampp\htdocs\recipes\views\posts\index.php%3C/b%3E%20on%20line%20%3Cb%3E65%3C/b%3E%3Cbr%20/%3E
+
+
+it looks like you need to change id to Recipe_ID in the posts index or something
+
+
+SELECT Recipe.Recipe_Name, Steps.Step_No, Steps.Step_Instructions, Ingredients.Ingredient_Name
+FROM Recipe INNER JOIN (Ingredients INNER JOIN Steps ON Ingredients.Ingredient_ID = Steps.Ingredient_ID) ON Recipe.Recipe_ID = Steps.Recipe_ID;
+
+SELECT Recipe.Recipe_Name, Recipe.Recipe_Description, Steps.Step_No, Steps.Step_Instructions, Ingredients.Ingredient_Name
+FROM Recipe INNER JOIN ON Recipe.RecipeID = Steps.Recipe_ID
+
+
+Works!
+SELECT Recipe.Recipe_Name, Recipe.Recipe_Description, Steps.Step_No, Steps.Step_Instructions, step_ingredients.Ingredient_ID
+FROM Recipe 
+INNER JOIN steps on recipe.Recipe_ID = steps.Recipe_ID
+INNER JOIN step_ingredients on steps.Step_No = step_ingredients.Step_No
+
+this version works BUT the second inner join i think needs to be fixed so that it's unique
+SELECT Recipe.Recipe_Name, Recipe.Recipe_Description, Steps.Step_No, Steps.Step_Instructions, ingredients.Ingredient_Name
+FROM Recipe 
+INNER JOIN steps on recipe.Recipe_ID = steps.Recipe_ID
+INNER JOIN step_ingredients on steps.Step_No = step_ingredients.Step_No
+INNER JOIN ingredients on step_ingredients.Ingredient_ID = ingredients.Ingredient_ID
+
+
+SELECT Recipe.Recipe_ID, Recipe.Recipe_Name, Recipe.Recipe_Description, Steps.Step_No, Steps.Step_Instructions, ingredients.Ingredient_Name
+							FROM Recipe 
+							INNER JOIN steps on recipe.Recipe_ID = steps.Recipe_ID
+							INNER JOIN step_ingredients on steps.Step_No = step_ingredients.Step_No
+							INNER JOIN ingredients on step_ingredients.Ingredient_ID = ingredients.Ingredient_ID
+                            Order BY recipe.Recipe_ID
+							
+This query returns all steps (when looking at all recipes)							
+SELECT Recipe.Recipe_ID, Recipe.Recipe_Name, Recipe.Recipe_Description, Steps.Step_No, Steps.Step_Instructions
+							FROM Recipe 
+							INNER JOIN steps on recipe.Recipe_ID = steps.Recipe_ID
+							Order BY recipe.Recipe_ID asc, steps.Step_No ASC
+							
+							
