@@ -36,6 +36,8 @@
 		//currently it doesn't do the error check because I don't know that it will be passed via post. that said, it is probably worth putting in some tpye of check so people can't just type it into the browser
 		foreach ($choices as $value){
 			$ingredientPost[] = Recipe::findIngredients($value);
+			$namePost = Recipe::find($value);
+			$names[] = $namePost->recipe_name;
 		}
 		//$ingredientPost = Recipe::findIngredients($_GET['recipe_id']);//so instead of getting the recipe_id, it needs to be given multiple options. that means its going to have to be an array as an input which means more CODING for me. no. it will loop through an array of inputs
 		require_once('views/email.php');
