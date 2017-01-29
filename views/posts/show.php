@@ -11,6 +11,13 @@
 <?php  //print_r($stepPost); echo("<br />");echo(count($stepPost)); echo("<br />");print_r(array_keys($stepPost)); //this line prints stuff for debugging mainly
 //this is for printing the entire steps array at once?>
 <?php 
+	
+	echo "<h4>Ingredients</h4>";
+	foreach ($ingredientPost as $value){
+		echo "$value, ";
+	}
+	echo "<br />\n";
+	echo "<h4>Steps</h4>";
 	$i=0;
 	foreach ($stepPost as $value){
 		if($i++ %2 == 0){
@@ -23,6 +30,8 @@
 		}
 		
 	}
+	
+	
 	?>
 
 <form action="" method="post">
