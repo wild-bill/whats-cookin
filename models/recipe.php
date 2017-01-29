@@ -98,26 +98,29 @@
 	
 	public static function findIngredients($id) {
 		/* So the play with one works (which is really just find_orig at this point), so I am trying one to just extract the steps array, but really I used ingredients for worst case scneario. the problem was with the query more than the code 1.27.17 */
+		/* fixing this method to pull in the ingredients, instead of using it as a tester method. 1/29/2017 */
 
 	 $db = Db::getInstance();  //make the connection so to speak
-      
-	  $req = $db->prepare('SELECT Recipe.Recipe_ID, Recipe.Recipe_Name, Recipe.Recipe_Description, Steps.Step_No, Steps.Step_Instructions, ingredients.Ingredient_Name 
-							FROM Recipe INNER JOIN steps on recipe.Recipe_ID = steps.Recipe_ID 
-							INNER JOIN step_ingredients on steps.Step_No = step_ingredients.Step_No 
-							INNER JOIN ingredients on step_ingredients.Ingredient_ID = ingredients.Ingredient_ID Order BY recipe.Recipe_ID asc, steps.Step_No ASC');  //trying this one out
+      $sql = "SELECT ingredients.Ingredient_Name
+					FROM Recipe INNER JOIN steps on recipe.Recipe_ID = steps.Recipe_ID 
+								INNER JOIN step_ingredients on steps.Recipe_ID = step_ingredients.Recipe_ID AND steps.Step_No = step_ingredients.Step_No
+								INNER JOIN ingredients on step_ingredients.Ingredient_ID = ingredients.Ingredient_ID
+								WHERE Recipe.Recipe_ID = ".$id."
+								Order BY recipe.Recipe_ID asc, steps.Step_No ASC";
+	  $req = $db->prepare($sql);  //trying this one out
       // the query was prepared, now we replace :id with our actual $id value
       $req->execute(array('recipe_id' => $id));   // This needs to be 'recipe_id' not just ID
       
 	  $resultSet = array(); //create result set array that will store our results
 	  
-	  while($secondPost = $req->fetch())
+	  while($ingredientPost = $req->fetch())
 	  {
-		$ingredient = $secondPost['Ingredient_Name'];
+		$ingredient = $ingredientPost['Ingredient_Name'];
 		$resultSet[] = $ingredient;
 	  }
-      //return new Recipe($post['Recipe_ID'], $post['Recipe_Name'], $post['Recipe_Description'], $post['Step_No'], $post['Step_Instructions'], $post['Ingredient_Name']);  //These actually need to be uppercase. Or I guess they need to match the DB names more correctly
-		$secondPost = $resultSet;
-		return $secondPost;
+      
+		$ingredientPost = $resultSet;
+		return $ingredientPost;
 	}
 	
 	public static function findSteps($id) {
@@ -152,6 +155,7 @@
 	
 	public static function find($id) {
 		/* The intention of this version is to query and capture everything I need for a "Recipe" page like allrecipes or whatever */
+		/* What this does is that it finds the particular recipe that is clicked on based on its id. it creates the whole recipe object, but we only take two values from it at the time. this can probably be redone and cleaned up a bit */
 
 	 $db = Db::getInstance();  //make the connection so to speak
      //need to prep the sql (idk why I didn't notice this before) so that we can put the $id in there so it doesn't just pull everything
