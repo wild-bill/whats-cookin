@@ -15,7 +15,8 @@
 
       // we use the given id to get the right post
       $post = Recipe::find($_GET['recipe_id']);
-	  $stepPost = Recipe::findSteps($_GET['recipe_id']);
+	  $stepPost = Recipe::findSteps($_GET['recipe_id']); //pull in the steps
+	  $ingredientPost = Recipe::findIngredients($_GET['recipe_id']); //can prob put recipe id into a variable
 
       require_once('views/posts/show.php');
     }
