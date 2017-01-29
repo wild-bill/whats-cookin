@@ -54,7 +54,7 @@
                        'settings'    => ['index', 'show'],
                        'artworks'    => ['index', 'show'],
                        'characters'  => ['index', 'show'],
-					   'recipes'     => ['index', 'show']);
+					   'recipes'     => ['index', 'show','email']);
 
   if (array_key_exists($controller, $controllers)) {
     if (in_array($action, $controllers[$controller])) {
