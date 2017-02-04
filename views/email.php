@@ -18,11 +18,18 @@ $messageStart = "
 $messageEnd = "</body>
 </html>";
 ob_start();
-//display the ingredients
+//display the ingredients. Something needs to go here about print first word, then comma separates. see: http://stackoverflow.com/questions/18279622/print-out-elements-from-an-array-with-a-comma-between-elements-except-the-last-w
 	foreach ($ingredientPost as $value){
-		foreach($value as $lineitem){
-			echo "$lineitem, ";
+		foreach($value as $subvalue){
+			//here $subvalue is an object instead of an array. I don't know why it acts differently in "show". Possibly because we are creating a new recipe controller object before getting here?
+			echo $subvalue->amount;
+			echo " ";
+			echo $subvalue->unit;
+			echo " ";
+			echo $subvalue->ingredient;
+			echo "<br />";
 		}
+		echo "<br />";
 	}
 //display the recipe names and links	
 	echo "<br />";
