@@ -32,7 +32,14 @@
 		$choice = rand(1,3); //make the parameters line up with the loop you will eventually put here instead of hard coded numbers
 		$choices[] = $choice;
 		$choice = rand(1,3);
-		$choices[] = $choice;
+		if(in_array($choice, $choices)){
+			$choice = rand(1,3);
+		}
+		else{
+			$choices[] = $choice;
+		}
+		//this works 99% of the time. the other % it will just show 1 recipe. not sure why but i know it's in the if/else
+		
 		//currently it doesn't do the error check because I don't know that it will be passed via post. that said, it is probably worth putting in some tpye of check so people can't just type it into the browser
 		foreach ($choices as $value){
 			$ingredientPost[] = Recipe::findIngredients($value);
