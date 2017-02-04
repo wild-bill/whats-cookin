@@ -19,16 +19,20 @@ $messageEnd = "</body>
 </html>";
 ob_start();
 //display the ingredients
-//echo "<h4>Ingredients</h4>";
 	foreach ($ingredientPost as $value){
 		foreach($value as $lineitem){
 			echo "$lineitem, ";
 		}
 	}
-	foreach ($choices as $value){
-		echo "<br /><a href=\"http://localhost:8080/recipes/index.php?controller=recipes&action=show&recipe_id=".$value."\">".$names[$value]."Recipe Name</a>"; //the recipe name has to be taken diff. this takes the id'th place in the array which is not correct
+//display the recipe names and links	
+	echo "<br />";
+	$length = count($choices);
+	for($i=0; $i<$length; $i++){
+		//print_r ($value);
+		//echo($choice);
+		echo "<br /><a href=\"http://localhost:8080/recipes/index.php?controller=recipes&action=show&recipe_id=".$choice."\">".$names[$i]."</a>"; //the recipe name has to be taken diff. this takes the id'th place in the array which is not correct because the array is [0,1]. tried subtracting 1 to offset array and still getting error
 	}
-
+//
 $displayed = ob_get_clean();
 
 $fullMessage = $messageStart . $displayed . $messageEnd;
@@ -44,6 +48,6 @@ $headers[] = 'From: Wha\'ts Cookin\'?" <birthday@example.com>';
 //$headers[] = 'Bcc: birthdaycheck@example.com';
 
 // Mail it
-mail($to, $subject, $fullMessage, implode("\r\n", $headers));
+//mail($to, $subject, $fullMessage, implode("\r\n", $headers));
 
 ?>
