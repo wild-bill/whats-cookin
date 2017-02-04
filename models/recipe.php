@@ -99,24 +99,32 @@
 	public static function findIngredients($id) {
 		/* So the play with one works (which is really just find_orig at this point), so I am trying one to just extract the steps array, but really I used ingredients for worst case scneario. the problem was with the query more than the code 1.27.17 */
 		/* fixing this method to pull in the ingredients, instead of using it as a tester method. 1/29/2017 */
+		/* This method now pulls in the amounts and units as well as the ingredient name. Units need to be corrected on the backend still. Could use cleaning up overall... This next step will be figuring out how to query to SUM by same ingredients. This may not be done in a query...not sure. Want to reuse code but not overfill it 2.4.17 */
 
 	 $db = Db::getInstance();  //make the connection so to speak
-      $sql = "SELECT ingredients.Ingredient_Name
+      $sql = "SELECT step_ingredients.Step_Amount, units.Description, ingredients.Ingredient_Name
 					FROM Recipe INNER JOIN steps on recipe.Recipe_ID = steps.Recipe_ID 
 								INNER JOIN step_ingredients on steps.Recipe_ID = step_ingredients.Recipe_ID AND steps.Step_No = step_ingredients.Step_No
 								INNER JOIN ingredients on step_ingredients.Ingredient_ID = ingredients.Ingredient_ID
+								INNER JOIN units on step_ingredients.UnitID = units.UnitID
 								WHERE Recipe.Recipe_ID = ".$id."
 								Order BY recipe.Recipe_ID asc, steps.Step_No ASC";
+								
+								
 	  $req = $db->prepare($sql);  //trying this one out
       // the query was prepared, now we replace :id with our actual $id value
       $req->execute(array('recipe_id' => $id));   // This needs to be 'recipe_id' not just ID
       
 	  $resultSet = array(); //create result set array that will store our results
 	  
+	  
 	  while($ingredientPost = $req->fetch())
 	  {
+		$amount = $ingredientPost['Step_Amount'];
+		$unit = $ingredientPost['Description'];
 		$ingredient = $ingredientPost['Ingredient_Name'];
-		$resultSet[] = $ingredient;
+		$ingredientObj = (object) array('amount' => $amount, 'unit' => $unit, 'ingredient' => $ingredient);
+		$resultSet[] = $ingredientObj;
 	  }
       
 		$ingredientPost = $resultSet;
